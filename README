@@ -1,0 +1,61 @@
+Setup Instructions
+==================
+
+1. Form teams of 3-4 students.  You may create a corresponding github
+   team in the course organization.
+
+2. Clone this repo.
+
+3. Create a new, private repo for your team in the course
+   organization.  Name your repo `TYY-team-TEAMNAME`, where,
+   - `T` is one charcter for the term: `f` Fall or `s` for Spring,
+   - `YY` is the two digit year, e.g. `19` for 2019,
+   - `TEAMNAME` is a name for your team.
+
+4. Give all team members access to the team repo in the course github
+   organization.
+
+5. Add all team members' names and CWIDs to the `AUTHORS` file.
+
+6. Change the remote for your cloned repo to your newly created team
+   repo and push.
+
+7. Double-check that (1) your team's github repo is correctly named
+   and (2) only your teammates (and the instructor/TA) can access your
+   team's github repo.
+
+
+Submission Instructions
+=======================
+
+These submission instructions are intended to promote collaboration
+with your teammates, make submitting your code easy, and avoid errors
+with incorrect submissions.  Please take care to correctly submit your
+work by the deadline.
+
+- Push all changes to your team repo created above in the course
+  organization before the deadline.
+
+- The TA/instructor will clone the user repos (based on the repository
+  name prefix) at the deadline and grade the code in the master
+  branch.
+
+- ONLY CODE THAT IS CORRECTLY SUBMITTED BY THE DEADLINE WILL BE
+  GRADED:
+  - Ensure that your code is pushed to a correctly named repo in the
+    course organization.  Incorrectly named repos will not be graded.
+  - Ensure that your code is in the master branch.  Code in other
+    branches will not be graded.
+  - Submit your code by the deadline.  Late work will not be graded.
+  - Keep the same directory structure and function names as in the
+    stater code.  The grading scripts will test your code based on the
+    directory structure and function names in the starter code.  If
+    you change either, your code will not pass the tests, and you will
+    not receive credit.
+  - Code that does not compile will not receive credit.
+
+
+Project Instructions
+====================
+
+See the `README-lab*.md` files for the instructions for each project.
