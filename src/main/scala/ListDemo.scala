@@ -43,8 +43,14 @@ class ListDemo[T](implicit ev : T => Ordered[T]) {
   // Use only recursion and pattern matching - do NOT use any built-in Scala libraries!
   // Example: foldLeft(List(a,b,c,d,e),i,f) --> f(f(f(f(f(i,a),b),c),d),e)
   def foldLeft[U](l : List[T], init : U, f : (U,T)=>U) : U = {
-    // TODO
-    init
+    // TODOi
+       def fold( l : List[T], leftList: U): U =
+         l match{
+           case Nil => leftList
+           case List() => leftList
+           case x +: l => fold(l, f(leftList, x))
+         }
+      fold(l, init)
   }
 
   // TODO: implement the "fold right" operation discussed in class.
