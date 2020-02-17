@@ -43,13 +43,13 @@ class ListDemo[T](implicit ev : T => Ordered[T]) {
   // Use only recursion and pattern matching - do NOT use any built-in Scala libraries!
   // Example: foldLeft(List(a,b,c,d,e),i,f) --> f(f(f(f(f(i,a),b),c),d),e)
   def foldLeft[U](l : List[T], init : U, f : (U,T)=>U) : U = {
-    // TODOi
-       def fold( l : List[T], leftList: U): U =
-         l match{
-           case Nil => leftList
-           case List() => leftList
-           case x +: l => fold(l, f(leftList, x))
-         }
+    // DONE
+      def fold( l : List[T], leftList: U): U =
+        l match{
+          case Nil => leftList
+          case List() => leftList
+          case x +: l => fold(l, f(leftList, x))
+      }
       fold(l, init)
   }
 
@@ -57,8 +57,14 @@ class ListDemo[T](implicit ev : T => Ordered[T]) {
   // Use only recursion and pattern matching - do NOT use any built-in Scala libraries!
   // Example: foldRight(List(a,b,c,d,e),i,f) --> f(a,f(b,f(c,f(d,f(e,i)))))
   def foldRight[U](l : List[T], init : U, f : (T,U)=>U) : U = {
-    // TODO
-    init
+    // DONE
+    l match {
+      case Nil => init
+      case head :: tail => {
+        val n_value = foldRight(tail, init, f)
+        f(head, n_value)
+      }
+    }
   }
 
   // TODO: implement the "filter" operation discussed in class.
