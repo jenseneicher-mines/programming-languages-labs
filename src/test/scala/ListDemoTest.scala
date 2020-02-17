@@ -69,10 +69,10 @@ class ListDemoTest extends FlatSpec {
     assert(ld.filter(List(1,4,2,5,3,6),(x:Int)=>(x < 3)) === List(1,2))
   }
   "Filter" should "properly capture integers greater than or equal to a bound" in {
-    assert(ld.filter(List(1,4,2,5,3,6),(x:Int)=>(x >= 3)) === List(3,4,5,6))
+    assert(ld.filter(List(1,4,2,5,3,6),(x:Int)=>(x >= 3)) === List(4,5,3,6))
   }
   "Filter" should "properly capture integers not equal to a bound" in {
-    assert(ld.filter(List(1,4,2,5,3,6),(x:Int)=>(x != 6)) === List(1,2,3,4,5))
+    assert(ld.filter(List(1,4,2,5,3,6),(x:Int)=>(x != 6)) === List(1,4,2,5,3))
   }
   "Filter" should "properly capture integers less than or equal to a bound" in {
     assert(ld.filter(List(1,4,2,5,3,6),(x:Int)=>(x <= 3)) === List(1,2,3))

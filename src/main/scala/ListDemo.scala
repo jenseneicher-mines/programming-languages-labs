@@ -71,8 +71,16 @@ class ListDemo[T](implicit ev : T => Ordered[T]) {
   // Use only recursion and pattern matching - do NOT use any built-in Scala libraries!
   // Example: filter(List(1,4,2,5,3,6),(x:Int)=>(x > 3)) --> List(4,5,6)
   def filter(l : List[T], f : T => Boolean) : List[T] = {
-    // TODO
-    Nil
+    l match {
+      case Nil => Nil
+      case head :: tail => {
+        if(f(head)) {
+          head :: filter(tail, f)
+        } else {
+          filter(tail, f)
+        }
+      }
+    }
   }
 
   // TODO: implement list reversal.
