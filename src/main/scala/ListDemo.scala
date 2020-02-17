@@ -87,7 +87,6 @@ class ListDemo[T](implicit ev : T => Ordered[T]) {
   // Use only recursion and pattern matching - do NOT use any built-in Scala libraries!
   // Example: reverse(List(a,b,c,d,e)) --> List(e,d,c,b,a)
   def reverse(l : List[T]) : List[T] = {
-    // TODO
-    Nil
+    foldLeft(l, Nil, (r : List[T], x : T) => x :: r)
   }
 }
