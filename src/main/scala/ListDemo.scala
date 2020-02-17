@@ -33,8 +33,8 @@ class ListDemo[T](implicit ev : T => Ordered[T]) {
     l match {
       case Nil => Nil
       case x::more => {
-        // TODO
-        Nil
+        // DONE
+        f(x) :: map(more, f)
       }
     }
   }
