@@ -48,21 +48,20 @@ class TreeDemo[T](implicit o : T => Ordered[T]) {
     }
   }
 
-  // TODO: get the maximum element in the tree
+  // get the maximum element in the tree
   def getMax(t : BinaryTree) : Option[T] = {
     t match {
       case Empty => None
-      case Node(l, d, r) => {
-        // TODO
-        None
-      }
+      case Node(l, d, r) => Some(max(max(d, getMax(l)), getMax(r)))
     }
   }
 
-  // TODO: get the minimum element in the tree
+  // get the minimum element in the tree
   def getMin(t : BinaryTree) : Option[T] = {
-    // TODO
-    None
+    t match {
+      case Empty => None
+      case Node(l, d, r) => Some(min(min(d, getMin(l)), getMin(r)))
+    }
   }
 
   // TODO: check if t is a binary search tree
