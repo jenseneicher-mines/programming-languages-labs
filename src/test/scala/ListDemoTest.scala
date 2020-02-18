@@ -8,19 +8,19 @@ class ListDemoTest extends FlatSpec {
   "Selection Sort" should "return a sorted list of five integers" in {
     assert(ld.selectionSort(List(3,2,4,1,5)) === List(1,2,3,4,5))
   }
-  "Selection Sort" should "return a sorted list of four integers" in {
+  it should "return a sorted list of four integers" in {
     assert(ld.selectionSort(List(3,2,4,1)) === List(1,2,3,4))
   }
-  "Selection Sort" should "return a sorted list of six integers" in {
+  it should "return a sorted list of six integers" in {
     assert(ld.selectionSort(List(12,2,6,10,7,9)) === List(2,6,7,9,10,12))
   }
-  "Selection Sort" should "return a sorted list of ten integers" in {
-    assert(ld.selectionSort(List(9,3,6,4,1,10,27,14,12,2)) === List(1,2,3,4,6,9,10,12,14,27))
+  it should "return a sorted list of mixed sign integers" in {
+    assert(ld.selectionSort(List(-9,3,6,4,1,10,27,14,12,2)) === List(-9,1,2,3,4,6,10,12,14,27))
   }
-  "Selection Sort" should "return a sorted list of sorted integers" in {
+  it should "return a sorted list of sorted integers" in {
     assert(ld.selectionSort(List(1,2,3,4,5,6)) === List(1,2,3,4,5,6))
   }
-  "Selection Sort" should "return a sorted list of reverse sorted integers" in {
+  it should "return a sorted list of reverse sorted integers" in {
     assert(ld.selectionSort(List(7,6,5,4,3,2,1)) === List(1,2,3,4,5,6,7))
   }
 
@@ -38,19 +38,19 @@ class ListDemoTest extends FlatSpec {
   "FoldLeft" should "sum the list elements properly" in {
     assert(ld.foldLeft(List(1,2,3),123,(x:Int,y:Int)=>x+y) === 6 + 123)
   }
-  "FoldLeft" should "sum the list elements properly #2" in {
+  it should "sum the list elements properly #2" in {
     assert(ld.foldLeft(List(1,2,3,4),1234,(x:Int,y:Int)=>x+y) === 10 + 1234)
   }
-  "FoldLeft" should "sum the list elements properly #3" in {
+  it should "sum the list elements properly #3" in {
     assert(ld.foldLeft(List(1,2,3,4,5),12345,(x:Int,y:Int)=>x+y) === 15 + 12345)
   }
-  "FoldLeft" should "sum the list elements properly #4" in {
+  it should "sum the list elements properly #4" in {
     assert(ld.foldLeft(List(3,2,1),321,(x:Int,y:Int)=>x+y) === 6 + 321)
   }
-  "FoldLeft" should "sum the list elements properly #5" in {
+  it should "sum the list elements properly #5" in {
     assert(ld.foldLeft(List(2,1,3,5),2135,(x:Int,y:Int)=>x+y) === 11 + 2135)
   }
-  "FoldLeft" should "sum the list elements properly #6" in {
+  it should "sum the list elements properly #6" in {
     assert(ld.foldLeft(List(1,2,3,4,5,6),123456,(x:Int,y:Int)=>x+y) === 21 + 123456)
   }
 
@@ -65,19 +65,19 @@ class ListDemoTest extends FlatSpec {
   "Filter" should "properly capture integers greater than a bound" in {
     assert(ld.filter(List(1,4,2,5,3,6),(x:Int)=>(x > 3)) === List(4,5,6))
   }
-  "Filter" should "properly capture integers less than a bound" in {
+  it should "properly capture integers less than a bound" in {
     assert(ld.filter(List(1,4,2,5,3,6),(x:Int)=>(x < 3)) === List(1,2))
   }
-  "Filter" should "properly capture integers greater than or equal to a bound" in {
+  it should "properly capture integers greater than or equal to a bound" in {
     assert(ld.filter(List(1,4,2,5,3,6),(x:Int)=>(x >= 3)) === List(4,5,3,6))
   }
-  "Filter" should "properly capture integers not equal to a bound" in {
+  it should "properly capture integers not equal to a bound" in {
     assert(ld.filter(List(1,4,2,5,3,6),(x:Int)=>(x != 6)) === List(1,4,2,5,3))
   }
-  "Filter" should "properly capture integers less than or equal to a bound" in {
+  it should "properly capture integers less than or equal to a bound" in {
     assert(ld.filter(List(1,4,2,5,3,6),(x:Int)=>(x <= 3)) === List(1,2,3))
   }
-  "Filter" should "properly capture integers equal to a bound" in {
+  it should "properly capture integers equal to a bound" in {
     assert(ld.filter(List(1,4,2,5,3,6),(x:Int)=>(x == 3)) === List(3))
   }
 
@@ -86,19 +86,19 @@ class ListDemoTest extends FlatSpec {
   "Reverse" should "properly reverse a list of integers" in {
     assert(ld.reverse(List(1,2,3,4)) === List(4,3,2,1))
   }
-  "Reverse" should "properly reverse a list of integers #2" in {
+  it should "properly reverse a list of integers #2" in {
     assert(ld.reverse(List(1,2,3,4,5,6,7)) === List(7,6,5,4,3,2,1))
   }
-  "Reverse" should "properly reverse a list of integers #3" in {
+  it should "properly reverse a list of integers #3" in {
     assert(ld.reverse(List(2,7,4,9,1)) === List(1,9,4,7,2))
   }
-  "Reverse" should "properly reverse a list of integers #4" in {
+  it should "properly reverse a list of integers #4" in {
     assert(ld.reverse(List(2,10,6,3,2,1)) === List(1,2,3,6,10,2))
   }
-  "Reverse" should "properly reverse a list of integers #5" in {
+  it should "properly reverse a list of integers with repeats" in {
     assert(ld.reverse(List(1,1,1,1,1,1,2,3,4,1,1,2)) === List(2,1,1,4,3,2,1,1,1,1,1,1))
   }
-  "Reverse" should "properly reverse a list of integers #6" in {
+  it should "properly reverse a list of integers with one entry" in {
     assert(ld.reverse(List(1)) === List(1))
   }
 }

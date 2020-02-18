@@ -10,17 +10,19 @@ class ListDemo[T](implicit ev : T => Ordered[T]) {
           (x,Nil)
         }
         case x::more => {
-          // TODO
-          (x,Nil)
+          extractSmallest(more) match{
+            case (small, rest) if small < x => (small, x::rest)
+            case (small, rest) => (x, small::rest) 
+          }
         }
       }
     }
     l match {
       case Nil => Nil
       case List(x) => List(x)
-      case x::y::more => {
-        // TODO
-        l
+      case x::more => {
+        var (small, rest) = extractSmallest(x::more)
+        small::selectionSort(rest)
       }
     }
   }
