@@ -109,6 +109,50 @@ class TreeDemoTest extends FlatSpec {
     it should "give the correct answer for simple non-BST" in {
         assert(td.isBST(td.replace(myTree, 3, Leaf(7))) === false)
     }
+    it should "give correct answer for simple string example" in {
+        val td2 = new TreeDemo[String]
+        import td2._
+         /*
+        this encodes the following tree:
+               "a"
+                 \
+                "b"
+        */
+        assert(td2.isBST(Node(Empty,"a",Leaf("b"))) === true)
+    }
+    it should "give correct answer for non-BST string example" in {
+        val td2 = new TreeDemo[String]
+        import td2._
+         /*
+        this encodes the following tree:
+               "c"
+             /     \
+            "r"    "b"
+            / \    /  \
+          "q" "g" "z" "e"
+                \
+                "h"
+        */
+        assert(td2.isBST(Node(Node(Leaf("q"),"r",Node(Empty,"g",Leaf("h"))),"c",Node(Leaf("z"),"b",Leaf("e")))) === false)
+    }
+    it should "give correct answer for simple duplicate string example" in {
+        val td2 = new TreeDemo[String]
+        import td2._
+         /*
+        this encodes the following tree:
+               "a"
+                 \
+                "a"
+        */
+        assert(td2.isBST(Node(Empty,"a",Leaf("a"))) === false)
+          /*
+        this encodes the following tree:
+               "a"
+              /
+            "a"
+        */
+        assert(td2.isBST(Node(Leaf("a"),"a",Empty)) === false)
+    }
 
     "BST Insert" should "give the correct answer for integer example" in {
         assert(td.insertBST(myTree,6) === td.replace(myTree,5,Node(Empty,5,Leaf(6))))

@@ -66,13 +66,21 @@ class TreeDemo[T](implicit o : T => Ordered[T]) {
 
   // TODO: check if t is a binary search tree
   def isBST(t : BinaryTree) : Boolean = {
-    t match {
-      case Empty => true
-      case Node(l, d, r) => {
-        // TODO
-        false
+    // Check if the nodes of the tree are smaller on the left and greater or equal on the right
+    def h(t: BinaryTree, min:Option[T], max:Option[T]) : Boolean = {
+      t match {
+        case Empty => true
+        case Node(l, d, r) => {
+          (min, max) match{
+            case (None, None) => (h(l,None,Some(d)) && h(r,Some(d), None)) // Max and min are anything (head)
+            case (None, Some(_max)) => (d <  _max && h(l, None, Some(d)) && h(r, Some(d), Some(_max))) // max is a num, min is anything (left traversal)
+            case (Some(_min), None) => (d > _min && h(l, Some(_min), Some(d)) && h(r, Some(d), None)) // max is anything, min is num (right traversal)
+            case (Some(_min), Some(_max)) => (d > _min && d < _max && h(l, Some(_min), Some(d)) && h(r, Some(d), Some(_max)))
+          }
+        }
       }
     }
+    h(t, None, None)
   }
 
 
