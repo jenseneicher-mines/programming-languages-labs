@@ -97,7 +97,12 @@ class TreeDemo[T](implicit o : T => Ordered[T]) {
 
   // TODO: checks if element x is contained in binary search tree t
   def searchBST(t : BinaryTree, x : T) : Boolean = {
-    // TODO
-    false
+    t match {
+      case Empty => false
+      case Node(l, d, r) =>
+        searchBST(l,x)
+        if(List(d) == x) true
+        searchBST(r,x)
+    }
   }
 }
