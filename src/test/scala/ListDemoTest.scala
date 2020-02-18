@@ -27,10 +27,13 @@ class ListDemoTest extends FlatSpec {
 
   // MAP
   "Map" should "work properly with a basic +1 function" in {
-    assert(ld.map(List(1,2,3,4,5),(x:Int)=>x+1) === List(2,3,4,5,6))
+    assert(ld.map(List(1,2,3,4,5),(x:Int)=> x+1) === List(2,3,4,5,6))
   }
   it should "work properly with a basic integer-to-string conversion" in {
-    assert(ld.map(List(1,2,3,4,5),(x:Int)=>"$"+x) === List("$1","$2","$3","$4","$5"))
+    assert(ld.map(List(1,2,3,4,5),(x:Int)=> "$"+x) === List("$1","$2","$3","$4","$5"))
+  }
+  it should "work properly with a basic negation function" in {
+    assert(ld.map(List(1,2,3,4,5),(x:Int)=> -x) === List(-1,-2,-3,-4,-5))
   }
 
 
@@ -38,26 +41,44 @@ class ListDemoTest extends FlatSpec {
   "FoldLeft" should "sum the list elements properly" in {
     assert(ld.foldLeft(List(1,2,3),123,(x:Int,y:Int)=>x+y) === 6 + 123)
   }
-  it should "sum the list elements properly #2" in {
-    assert(ld.foldLeft(List(1,2,3,4),1234,(x:Int,y:Int)=>x+y) === 10 + 1234)
+  it should "work to implement reverse" in {
+    assert(ld.foldLeft(List(1,2,3,4),Nil,(x:List[Int], y:Int)=> y::x) === List(4,3,2,1))
   }
-  it should "sum the list elements properly #3" in {
-    assert(ld.foldLeft(List(1,2,3,4,5),12345,(x:Int,y:Int)=>x+y) === 15 + 12345)
+  it should "work to implement length" in {
+    assert(ld.foldLeft(List(1,2,3,4),0,(x:Int,y:Int)=>1+x) === 4)
   }
-  it should "sum the list elements properly #4" in {
-    assert(ld.foldLeft(List(3,2,1),321,(x:Int,y:Int)=>x+y) === 6 + 321)
+  it should "work to implement every" in {
+    var h = (y:Any, x:Int) => {if (x < 3) y else false};
+    assert(ld.foldLeft(List(1,2,3,4),true,h) === false)
+    assert(ld.foldLeft(List(1,2,0,-1),true,h) === true)
   }
-  it should "sum the list elements properly #5" in {
-    assert(ld.foldLeft(List(2,1,3,5),2135,(x:Int,y:Int)=>x+y) === 11 + 2135)
+  it should "work to turn a list into a string" in {
+    var h = (y:String, x:Int) => {y+x};
+    assert(ld.foldLeft(List(1,2,3,4),"",h) === "1234")
   }
-  it should "sum the list elements properly #6" in {
-    assert(ld.foldLeft(List(1,2,3,4,5,6),123456,(x:Int,y:Int)=>x+y) === 21 + 123456)
-  }
-
 
   // FOLD RIGHT
   "FoldRight" should "sum the list elements properly" in {
     assert(ld.foldRight(List(1,2,3),123,(y:Int,x:Int)=>y+x) === 6 + 123)
+  }
+  it should "work to append two lists" in {
+    assert(ld.foldRight(List(1,2,3),List(4,5,6,7),(y:Int, x:List[Int])=> y::x) === List(1,2,3,4,5,6,7))
+  }
+  it should "work to as a map function" in {
+    val plusOne = (x: Int) => x + 1;
+    assert(ld.foldRight(List(1,2,3),Nil, (x:Int, y:List[Int])=> plusOne(x)::y) === List(2,3,4))
+  }
+  it should "work to as a filter function" in {
+    val filter = (x:Int, y:List[Int]) => { x match{
+                                            case t if t < 2 => t :: y
+                                            case _ => y
+                                           }
+                                         };
+    assert(ld.foldRight(List(1,2,3), Nil, filter) === List(1))
+  }
+  it should "work to turn a list into a reversed string" in {
+    var h = (x:Int, y:String) => {y+x};
+    assert(ld.foldRight(List(1,2,3,4),"",h) === "4321")
   }
 
 
