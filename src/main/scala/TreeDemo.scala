@@ -26,8 +26,11 @@ class TreeDemo[T](implicit o : T => Ordered[T]) {
     t match {
       case Empty => Empty
       case Node(l, d, r) => {
-        // TODO
-        Empty
+        if (d == x){
+          s
+        } else {
+          Node(replace(l, x, s), d, replace(r, x, s))
+        }
       }
     }
   }
