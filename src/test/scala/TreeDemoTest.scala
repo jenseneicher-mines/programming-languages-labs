@@ -18,6 +18,19 @@ class TreeDemoTest extends FlatSpec {
     "Traverse" should "do in-order traversal for a small tree containing integers" in {
         assert(td.traverse(myTree) === List(1,2,3,4,5))
     }
+    it should "do in-order traversal for a larger tree containing integers" in {
+         /*
+          this encodes the following tree:
+                  4
+               /     \
+              2       4
+             / \     / \
+            1   3   2   5
+                   / \
+                  1   3
+          */
+        assert(td.traverse(td.replace(myTree,5,myTree)) === List(1,2,3,4,1,2,3,4,5))
+    }
     it should "do in-order traversal for a small tree containing strings" in {
         /*
         this encodes the following tree:
@@ -33,6 +46,32 @@ class TreeDemoTest extends FlatSpec {
         val myStrTree = Node(Node(Leaf("one"),"two",Leaf("three")),"four",Leaf("five"))
         assert(td2.traverse(myStrTree) === List("one","two","three","four","five"))
     }
+    it should "do in-order traversal for a large tree containing strings" in {
+        /*
+        this encodes the following tree:
+                       "four"
+                      /      \
+                    "two"   "five"
+                    /   \
+                "four" "three"
+                /      \
+            "two"    "five"
+            /   \
+        "one"  "three" 
+        */
+
+        val td2 = new TreeDemo[String]
+        import td2._
+        val myStrTree = Node(Node(Leaf("one"),"two",Leaf("three")),"four",Leaf("five"))
+        assert(td2.traverse(td2.replace(myStrTree, "one", myStrTree)) === List("one","two","three","four","five","two","three","four","five"))
+    }
+    it should "do in-order traversal for empty tree" in {
+        assert(td.traverse(Empty) === Nil)
+    }
+    it should "do in-order traversal for a leaf" in {
+        assert(td.traverse(Leaf(1)) === List(1))
+    }
+    
 
     "Remove" should "properly remove the left subtree in the integer example" in {
         assert(td.remove(myTree, 2) === Node(Empty,4,Leaf(5)))
@@ -71,6 +110,9 @@ class TreeDemoTest extends FlatSpec {
         */
         assert(td2.getMax(Node(Node(Leaf("q"),"r",Node(Empty,"g",Leaf("h"))),"c",Node(Leaf("z"),"b",Leaf("e")))) === Some("z"))
     }
+    it should "give the correct element for an leaf example" in {
+        assert(td.getMin(Leaf(4)) === Some(4))
+    }
 
     "GetMin" should "properly return the smallest element of a small integer example" in {
         assert(td.getMin(Node(Empty,4,Leaf(5))) === Some(4))
@@ -100,6 +142,9 @@ class TreeDemoTest extends FlatSpec {
                 "h"
         */
         assert(td2.getMin(Node(Node(Leaf("q"),"r",Node(Empty,"g",Leaf("h"))),"c",Node(Leaf("z"),"b",Leaf("e")))) === Some("b"))
+    }
+    it should "give the correct element for an leaf example" in {
+        assert(td.getMin(Leaf(4)) === Some(4))
     }
 
     "Is BST" should "give the correct answer for integer example" in {
@@ -151,6 +196,9 @@ class TreeDemoTest extends FlatSpec {
             "a"
         */
         assert(td2.isBST(Node(Leaf("a"),"a",Empty)) === false)
+    }
+    it should "give the correct element for an leaf example" in {
+        assert(td.isBST(Leaf(4)) === true)
     }
 
     "BST Insert" should "give the correct answer for integer example" in {
