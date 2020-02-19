@@ -21,7 +21,7 @@ class TreeDemo[T](implicit o : T => Ordered[T]) {
     replace(t, x, Empty)
   }
 
-  // TODO: replace all nodes equal to x in tree t with subtree s
+  // TODO: replace all nodes equal to x in tree t with subtree
   def replace(t : BinaryTree, x : T, s : BinaryTree) : BinaryTree = {
     t match {
       case Empty => Empty
@@ -90,22 +90,27 @@ class TreeDemo[T](implicit o : T => Ordered[T]) {
   // TODO: insert element x into binary search tree t
   def insertBST(t : BinaryTree, x : T) : BinaryTree = {
     t match {
-      case Empty => Leaf(x)
       case Node(l,d,r) => {
-        // TODO
-        Empty
+        if(l == Empty && d > x) Node(Leaf(x),d,r)
+        if(r == Empty && d < x) Node(l,d,Leaf(x))
+        if(d > x)  insertBST(l,x)
+        insertBST(r,x) 
       }
+      case Empty => t
     }
   }
 
   // TODO: checks if element x is contained in binary search tree t
   def searchBST(t : BinaryTree, x : T) : Boolean = {
     t match {
-      case Empty => false
-      case Node(l, d, r) =>
-        searchBST(l,x)
-        if(List(d) == x) true
+      case Node(l, d, r) => {
+        if(d == x) true
+        if(l == x) true
+        if(r == x) true
+        if(d > x) searchBST(l,x)
         searchBST(r,x)
+      }
+      case Empty => false
     }
   }
 }

@@ -156,7 +156,7 @@ class TreeDemoTest extends FlatSpec {
 
     "BST Insert" should "give the correct answer for integer example" in {
         assert(td.insertBST(myTree,6) === td.replace(myTree,5,Node(Empty,5,Leaf(6))))
-    }
+    } 
 
     "BST Search" should "give the correct answer for non-existant element" in {
         assert(td.searchBST(myTree,6) === false)
