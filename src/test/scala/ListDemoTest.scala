@@ -11,9 +11,6 @@ class ListDemoTest extends FlatSpec {
   it should "return a sorted list of four integers" in {
     assert(ld.selectionSort(List(3,2,4,1)) === List(1,2,3,4))
   }
-  it should "return a sorted list of six integers" in {
-    assert(ld.selectionSort(List(12,2,6,10,7,9)) === List(2,6,7,9,10,12))
-  }
   it should "return a sorted list of mixed sign integers" in {
     assert(ld.selectionSort(List(-9,3,6,4,1,10,27,14,12,2)) === List(-9,1,2,3,4,6,10,12,14,27))
   }
@@ -22,6 +19,9 @@ class ListDemoTest extends FlatSpec {
   }
   it should "return a sorted list of reverse sorted integers" in {
     assert(ld.selectionSort(List(7,6,5,4,3,2,1)) === List(1,2,3,4,5,6,7))
+  }
+  it should "return Nil" in {
+    assert(ld.selectionSort(Nil) === Nil)
   }
 
 
@@ -34,6 +34,20 @@ class ListDemoTest extends FlatSpec {
   }
   it should "work properly with a basic negation function" in {
     assert(ld.map(List(1,2,3,4,5),(x:Int)=> -x) === List(-1,-2,-3,-4,-5))
+  }
+  it should "work properly with a basic string-append conversion" in {
+    val ld2 = new ListDemo[String]
+    assert(ld2.map(List("a","b","c","d","e"),(x:String)=> x+"h") === List("ah","bh","ch","dh","eh"))
+  }
+  it should "work properly with a non-lambda function as input" in {
+    val ld2 = new ListDemo[String]
+    def h(x : String) : String = {
+      x+"h"
+    }
+    assert(ld2.map(List("a","b","c","d","e"),h) === List("ah","bh","ch","dh","eh"))
+  }
+  it should "work properly with an empty list as an input" in {
+    assert(ld.map(Nil,(x:Int)=> -x) === Nil)
   }
 
 
@@ -56,6 +70,10 @@ class ListDemoTest extends FlatSpec {
     var h = (y:String, x:Int) => {y+x};
     assert(ld.foldLeft(List(1,2,3,4),"",h) === "1234")
   }
+  it should "work properly with an empty list as an input" in {
+    assert(ld.foldLeft(Nil,123,(x:Int,y:Int)=>x+y) === 123)
+  }
+
 
   // FOLD RIGHT
   "FoldRight" should "sum the list elements properly" in {
@@ -79,6 +97,9 @@ class ListDemoTest extends FlatSpec {
   it should "work to turn a list into a reversed string" in {
     var h = (x:Int, y:String) => {y+x};
     assert(ld.foldRight(List(1,2,3,4),"",h) === "4321")
+  }
+  it should "work on an empty list" in {
+    assert(ld.foldRight(Nil,123,(y:Int,x:Int)=>y+x) === 123)
   }
 
 

@@ -18,7 +18,6 @@ class TreeDemoTest extends FlatSpec {
     "Traverse" should "do in-order traversal for a small tree containing integers" in {
         assert(td.traverse(myTree) === List(1,2,3,4,5))
     }
-
     it should "do in-order traversal for a small tree containing strings" in {
         /*
         this encodes the following tree:
