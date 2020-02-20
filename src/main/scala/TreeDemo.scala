@@ -100,7 +100,7 @@ class TreeDemo[T](implicit o : T => Ordered[T]) {
           else Node(insertBST(l,x), d, r)
         }
       }
-      case Empty => t
+      case Empty => Node(Empty,x,Empty)
     }
   }
 

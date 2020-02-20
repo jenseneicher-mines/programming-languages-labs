@@ -76,10 +76,44 @@ class TreeDemoTest extends FlatSpec {
     "Remove" should "properly remove the left subtree in the integer example" in {
         assert(td.remove(myTree, 2) === Node(Empty,4,Leaf(5)))
     }
+    it should "properly remove the right subtree" in {
+      assert(td.remove(myTree,5) == Node(Node(Leaf(1),2,Leaf(3)),4,Empty))
+    }
+    it should "properly remove a left leaf" in {
+      assert(td.remove(myTree,1) == Node(Node(Empty,2,Leaf(3)),4,Leaf(5)))
+    }
+    it should "properly remove a right leaf" in {
+      assert(td.remove(myTree,3) == Node(Node(Leaf(1),2,Empty),4,Leaf(5)))
+    }
+    it should "properly remove the root" in {
+      assert(td.remove(myTree,4) == Empty)
+    }
+    it should "properly remove a lone node" in {
+      assert(td.remove(Node(Empty,1,Empty),1) == Empty)
+    }
+
+
 
     "Replace" should "properly replace the left subtree in the integer example" in {
         assert(td.replace(myTree, 2, myTree) === Node(myTree,4,Leaf(5)))
     }
+    it should "properly replace an empty root" in {
+      assert(td.replace(Leaf(1), 1, Node(Leaf(1),2,Leaf(3))) == Node(Leaf(1),2,Leaf(3)))
+    }
+    it should "properly replace a full root" in {
+      assert(td.replace(Node(Leaf(0),1,Leaf(2)), 1, Node(Leaf(1),2,Leaf(3))) == Node(Leaf(1),2,Leaf(3)))
+    }
+    it should "properly replace a left root" in {
+      assert(td.replace(Node(Leaf(0),1,Empty), 1, Node(Leaf(1),2,Leaf(3))) == Node(Leaf(1),2,Leaf(3)))
+    }
+    it should "properly replace a right root" in {
+      assert(td.replace(Node(Empty,1,Leaf(2)), 1, Node(Leaf(1),2,Leaf(3))) == Node(Leaf(1),2,Leaf(3)))
+    }
+    it should "properly replace low leaf" in {
+      assert(td.replace(Node(Node(Leaf(0),1,Leaf(2)),3,Leaf(4)), 0, Node(Leaf(-2),-1,Leaf(0))) === 
+Node(Node(Node(Leaf(-2),-1,Leaf(0)),1,Leaf(2)),3,Leaf(4)), 0)
+    }
+
 
     "GetMax" should "properly return the largest element of a small integer example" in {
         assert(td.getMax(Node(Empty,4,Leaf(5))) === Some(5))
@@ -205,11 +239,28 @@ class TreeDemoTest extends FlatSpec {
     "BST Insert" should "give the correct answer for integer example" in {
         assert(td.insertBST(myTree,6) === td.replace(myTree,5,Node(Empty,5,Leaf(6))))
     } 
+    it should "add correctly to Empty int tree" in {
+      assert(td.insertBST(Empty,1) === Node(Empty,1,Empty))
+    }
+    it should "add correctly to tree when larger" in {
+      assert(td.insertBST(Leaf(2), 3) === Node(Empty,2,Leaf(3)))
+    }
+    it should "add correctly to tree when smaller" in {
+      assert(td.insertBST(Leaf(2), 1) === Node(Leaf(1),2,Empty))
+    }
+    it should "add correctly to tree leaf smaller" in {
+      assert(td.insertBST(Node(Node(Leaf(2),3,Leaf(4)), 5,Leaf(6)), 0) === Node(Node(Node(Leaf(0),2,Empty),3,Leaf(4)),5,Leaf(6)))
+    }
+    it should "add correctly to tree leaf larger" in {
+      assert(td.insertBST(Node(Node(Leaf(2),3,Leaf(4)), 5,Leaf(6)), 7) === Node(Node(Leaf(2),3,Leaf(4)),5,Node(Empty,6,Leaf(7))))
+    }
+
+
 
     "BST Search" should "give the correct output for a string tree" in {
         val td2 = new TreeDemo[String]
         import td2._
-
+     
         val myStringTree = Node(Node(Leaf("b"),"g",Node(Leaf("h"),"i",Leaf("j"))),"k",Leaf("l"))
 
          /*
@@ -238,5 +289,12 @@ class TreeDemoTest extends FlatSpec {
     }
     it should "give the correct answer for integer example Root" in {
         assert(td.searchBST(myTree,4) === true)
+    }
+    it should "give the correct answer for char example leaf" in {
+      val td2 = new TreeDemo[String]
+      import td2._
+
+      val myStringTree = Node(Node(Leaf("b"),"g",Node(Leaf("h"),"i",Leaf("j"))),"k",Leaf("l"))
+      assert(td2.searchBST(myStringTree, "j") == true)
     }
 }
