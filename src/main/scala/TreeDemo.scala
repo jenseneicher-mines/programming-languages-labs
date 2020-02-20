@@ -109,10 +109,10 @@ class TreeDemo[T](implicit o : T => Ordered[T]) {
     t match {
       case Node(l, d, r) => {
         if(d == x) true
-        if(l == x) true
-        if(r == x) true
-        if(d > x) searchBST(l,x)
-        searchBST(r,x)
+        else if(r != Empty && l != Empty) searchBST(l, x) || searchBST(r, x)
+        else if(r != Empty) searchBST(r, x)
+        else if(l != Empty) searchBST(l, x)
+        else false
       }
       case Empty => false
     }
