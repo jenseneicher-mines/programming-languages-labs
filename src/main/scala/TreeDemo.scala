@@ -91,10 +91,14 @@ class TreeDemo[T](implicit o : T => Ordered[T]) {
   def insertBST(t : BinaryTree, x : T) : BinaryTree = {
     t match {
       case Node(l,d,r) => {
-        if(l == Empty && d > x) Node(Leaf(x),d,r)
-        if(r == Empty && d < x) Node(l,d,Leaf(x))
-        if(d > x)  insertBST(l,x)
-        insertBST(r,x) 
+        if(x > d){
+          if(r == Empty) Node(l,d,Leaf(x))
+          else Node(l, d, insertBST(r,x))
+        }
+        else{
+          if(l == Empty) Node(Leaf(x),d,r)
+          else Node(insertBST(l,x), d, r)
+        }
       }
       case Empty => t
     }
