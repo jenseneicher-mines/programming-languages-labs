@@ -9,9 +9,113 @@ object Evaluator2 {
     e match {
       // Completed example cases
       case ValueExpr(BoolVal(b)) => Some(BoolVal(b))
-      case BopExpr(e1,AndBop,e2) => {
+      case ValueExpr(NumVal(b)) => Some(NumVal(b))
+      case ValueExpr(StringVal(b)) => Some(StringVal(b))
+
+      // Binary Operators
+      // &&
+      case BopExpr(e1,AndBop,e2) => { 
         (eval(e1),eval(e2)) match {
           case (Some(BoolVal(b1)),Some(BoolVal(b2))) => Some(BoolVal(b1 && b2))
+          case _ => None
+        }
+      }
+      // ||
+      case BopExpr(e1,OrBop,e2) => {
+        (eval(e1),eval(e2)) match {
+          case (Some(BoolVal(b1)),Some(BoolVal(b2))) => Some(BoolVal(b1 || b2))
+          case _ => None
+        }
+      }
+      // +
+      case BopExpr(e1,PlusBop,e2) => {
+        (eval(e1),eval(e2)) match {
+          case (Some(NumVal(b1)),Some(NumVal(b2))) => Some(NumVal(b1 + b2))
+          case _ => None
+        }
+      }
+      // -
+      case BopExpr(e1,MinusBop,e2) => {
+        (eval(e1),eval(e2)) match {
+          case (Some(NumVal(b1)),Some(NumVal(b2))) => Some(NumVal(b1 - b2))
+          case _ => None
+        }
+      }
+      // *
+      case BopExpr(e1,TimesBop,e2) => {
+        (eval(e1),eval(e2)) match {
+          case (Some(NumVal(b1)),Some(NumVal(b2))) => Some(NumVal(b1 * b2))
+          case _ => None
+        }
+      }
+      // /
+      case BopExpr(e1,DivBop,e2) => {
+        (eval(e1),eval(e2)) match {
+          case (Some(NumVal(b1)),Some(NumVal(b2))) => Some(NumVal(b1 / b2))
+          case _ => None
+        }
+      }
+      // ===
+      case BopExpr(e1,EqBop,e2) => {
+        (eval(e1),eval(e2)) match {
+          case (Some(NumVal(b1)),Some(NumVal(b2))) => Some(BoolVal(b1 == b2))
+          case (Some(BoolVal(b1)),Some(BoolVal(b2))) => Some(BoolVal(b1 == b2))
+          case _ => None
+        }
+      }
+      // !==
+      case BopExpr(e1,NeqBop,e2) => {
+        (eval(e1),eval(e2)) match {
+          case (Some(NumVal(b1)),Some(NumVal(b2))) => Some(BoolVal(b1 != b2))
+          case (Some(BoolVal(b1)),Some(BoolVal(b2))) => Some(BoolVal(b1 != b2))
+          case _ => None
+        }
+      }
+      // <
+      case BopExpr(e1,LtBop,e2) => {
+        (eval(e1),eval(e2)) match {
+          case (Some(NumVal(b1)),Some(NumVal(b2))) => Some(BoolVal(b1 < b2))
+          case (Some(BoolVal(b1)),Some(BoolVal(b2))) => Some(BoolVal(b1 < b2))
+          case _ => None
+        }
+      }
+      // <=
+      case BopExpr(e1,LteBop,e2) => {
+        (eval(e1),eval(e2)) match {
+          case (Some(NumVal(b1)),Some(NumVal(b2))) => Some(BoolVal(b1 <= b2))
+          case (Some(BoolVal(b1)),Some(BoolVal(b2))) => Some(BoolVal(b1 <= b2))
+          case _ => None
+        }
+      }
+      // >
+      case BopExpr(e1,GtBop,e2) => {
+        (eval(e1),eval(e2)) match {
+          case (Some(NumVal(b1)),Some(NumVal(b2))) => Some(BoolVal(b1 > b2))
+          case (Some(BoolVal(b1)),Some(BoolVal(b2))) => Some(BoolVal(b1 > b2))
+          case _ => None
+        }
+      }
+      // >=
+      case BopExpr(e1,GtBop,e2) => {
+        (eval(e1),eval(e2)) match {
+          case (Some(NumVal(b1)),Some(NumVal(b2))) => Some(BoolVal(b1 >= b2))
+          case (Some(BoolVal(b1)),Some(BoolVal(b2))) => Some(BoolVal(b1 >= b2))
+          case _ => None
+        }
+      }
+
+      // Unary Operators
+      // !
+      case UopExpr(NotUop,e1) => {
+        eval(e1) match {
+          case Some(BoolVal(b1)) => Some(BoolVal(!b1))
+          case _ => None
+        }
+      }
+      // -
+      case UopExpr(NotUop,e1) => {
+        eval(e1) match {
+          case Some(NumVal(b1)) => Some(NumVal(-b1))
           case _ => None
         }
       }
@@ -46,6 +150,8 @@ object Evaluator2 {
     e match {
       case ValueExpr(BoolVal(_)) => Some(BoolType)
       case ValueExpr(NumVal(_)) => Some(NumType)
+      // Binary Operators
+      // && ||
       case BopExpr(e1,(AndBop|OrBop),e2) => {
         val t1 = typecheck(e1)
         val t2 = typecheck(e2)
@@ -54,8 +160,41 @@ object Evaluator2 {
           case _ => None
         }
       }
-      // TODO: replace wildcard with other cases
-      case _ => throw UnimplementedError(e)
+      // + - * /
+      case BopExpr(e1,(PlusBop|MinusBop|TimesBop|DivBop),e2) => {
+        val t1 = typecheck(e1)
+        val t2 = typecheck(e2)
+        (t1,t2) match {
+          case (Some(NumType),Some(NumType)) => Some(NumType)
+          case _ => None
+        }
+      }
+      // === !=== < <= > >=
+      case BopExpr(e1,(EqBop|NeqBop|LtBop|LteBop|GtBop|GteBop),e2) => {
+        val t1 = typecheck(e1)
+        val t2 = typecheck(e2)
+        (t1,t2) match {
+          case (Some(NumType),Some(NumType)) => Some(BoolType)
+          case (Some(BoolType),Some(BoolType)) => Some(BoolType)
+          case _ => None
+        }
+      }
+
+      // Unary Operators
+      // !
+      case UopExpr((NotUop), e1) => {
+        typecheck(e1) match {
+          case Some(BoolType) => Some(BoolType)
+          case _ => None
+        }
+      }
+      // -
+      case UopExpr((NegUop), e1) => {
+        typecheck(e1) match {
+          case Some(NumType) => Some(NumType)
+          case _ => None
+        }
+      }
 
       // Unimplemented for this project
       case ValueExpr(StringVal(_)) => throw UnimplementedError(e)
