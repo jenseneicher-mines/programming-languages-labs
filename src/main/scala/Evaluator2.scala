@@ -10,7 +10,6 @@ object Evaluator2 {
       // Completed example cases
       case ValueExpr(BoolVal(b)) => Some(BoolVal(b))
       case ValueExpr(NumVal(b)) => Some(NumVal(b))
-      case ValueExpr(StringVal(b)) => Some(StringVal(b))
 
       // Binary Operators
       // &&
@@ -96,7 +95,7 @@ object Evaluator2 {
         }
       }
       // >=
-      case BopExpr(e1,GtBop,e2) => {
+      case BopExpr(e1,GteBop,e2) => {
         (eval(e1),eval(e2)) match {
           case (Some(NumVal(b1)),Some(NumVal(b2))) => Some(BoolVal(b1 >= b2))
           case (Some(BoolVal(b1)),Some(BoolVal(b2))) => Some(BoolVal(b1 >= b2))
@@ -113,16 +112,12 @@ object Evaluator2 {
         }
       }
       // -
-      case UopExpr(NotUop,e1) => {
+      case UopExpr(NegUop,e1) => {
         eval(e1) match {
           case Some(NumVal(b1)) => Some(NumVal(-b1))
           case _ => None
         }
       }
-
-      // TODO: replace wildcard with other cases
-      case _ => throw UnimplementedError(e)
-
 
       // Unimplemented for this project
       case VarExpr(_) => throw UnimplementedError(e)
