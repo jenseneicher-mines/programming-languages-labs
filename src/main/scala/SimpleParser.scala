@@ -28,12 +28,21 @@ object SimpleParser extends JavaTokenParsers {
     case(s:Expr) => s
   }
 
-  def term: Parser[Expr] = atom ^^ { // <== TODO
+  // Term 
+  // Parse / && *
+  def term: Parser[Expr] = ((atom ~ ("*" | "/" | "&&") ~ term) | atom) ^^ {
+    case((s:Expr) ~ (op:String) ~ (t:Expr)) => BopExpr(s, (op match {
+      case "*" => TimesBop
+      case "/" => DivBop
+      case "&&" => AndBop
+    }), t)
     case(s:Expr) => s
   }
 
-  def atom: Parser[Expr] = "true" ^^ { // <== TODO
+  def atom: Parser[Expr] = ("true"| "false" | floatingPointNumber | decimalNumber)^^ { // <== TODO
     case("true") => ve(true)
+    case("false") => ve(false)
+    case(floatingPointNumber) => ve(NumVal(floatingPointNumber.toFloat))
   }
 
   def parse(s:String) : Expr = {
