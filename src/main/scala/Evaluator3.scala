@@ -30,10 +30,7 @@ object Evaluator3 {
       case BopExpr(e1,TimesBop,e2) => NumVal(toNum(eval(env, e1)) * toNum(eval(env, e2)))
       // /
       case BopExpr(e1,DivBop,e2) => NumVal(toNum(eval(env, e1)) / toNum(eval(env, e2)))
-      // ===
-      case BopExpr(e1,EqBop,e2) if(toNum(eval(env, e1)) == toNum(eval(env, e2))) => BoolVal(true)
-      case BopExpr(e1,EqBop,e2) if(toNum(eval(env, e1)) != toNum(eval(env, e2))) => BoolVal(false)
-      // !==
+      // 
       
 
       // Vars, If, Let
