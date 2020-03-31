@@ -18,7 +18,25 @@ object Evaluator3 {
       // TODO: replace wildcard with other cases: BoolVal, NumVal, ||,
       // +, -, *, /, <=, <, >=, >, ==, !=, - (unary), !, Vars, If,
       // Let.
-      case _ => throw UnimplementedError(e)
+      
+      // Binary Operators
+      // ||
+      case BopExpr(e1,OrBop,e2) => BoolVal(toBool(eval(env, e1)) || toBool(eval(env, e2)))
+      // +
+      case BopExpr(e1,PlusBop,e2) => NumVal(toNum(eval(env, e1)) + toNum(eval(env, e2)))
+      // -
+      case BopExpr(e1,MinusBop,e2) => NumVal(toNum(eval(env, e1)) - toNum(eval(env, e2)))
+      // *
+      case BopExpr(e1,TimesBop,e2) => NumVal(toNum(eval(env, e1)) * toNum(eval(env, e2)))
+      // /
+      case BopExpr(e1,DivBop,e2) => NumVal(toNum(eval(env, e1)) / toNum(eval(env, e2)))
+      // ===
+      case BopExpr(e1,EqBop,e2) if(toNum(eval(env, e1)) == toNum(eval(env, e2))) => BoolVal(true)
+      case BopExpr(e1,EqBop,e2) if(toNum(eval(env, e1)) != toNum(eval(env, e2))) => BoolVal(false)
+      // !==
+      
+
+      // Vars, If, Let
 
       // See: Ast.readEnvironment, Ast.pushEnvironment
 
