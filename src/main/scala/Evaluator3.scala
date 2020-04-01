@@ -15,6 +15,9 @@ object Evaluator3 {
         UndefVal
       }
 
+      case ValueExpr(BoolVal(b)) => BoolVal(b)
+      case ValueExpr(NumVal(b)) => NumVal(b)
+
       // TODO: replace wildcard with other cases: BoolVal, NumVal, ||,
       // +, -, *, /, <=, <, >=, >, ==, !=, - (unary), !, Vars, If,
       // Let.
@@ -30,8 +33,70 @@ object Evaluator3 {
       case BopExpr(e1,TimesBop,e2) => NumVal(toNum(eval(env, e1)) * toNum(eval(env, e2)))
       // /
       case BopExpr(e1,DivBop,e2) => NumVal(toNum(eval(env, e1)) / toNum(eval(env, e2)))
-      // 
-      
+      // ===
+      case BopExpr(e1,EqBop,e2) => {
+        (eval(env, e1), eval(env, e2)) match {
+          case (NumVal(b1), NumVal(b2)) => BoolVal(b1 == b2)
+          case (BoolVal(b1), BoolVal(b2)) => BoolVal(b1 == b2)
+          case _ => UndefVal
+        }
+      }
+      // !==
+      case BopExpr(e1,NeqBop,e2) => {
+        (eval(env, e1), eval(env, e2)) match {
+          case (NumVal(b1),NumVal(b2))=> BoolVal(b1 != b2)
+          case (BoolVal(b1),BoolVal(b2)) => BoolVal(b1 != b2)
+          case _ => UndefVal
+        }
+      }
+      // <
+      case BopExpr(e1,LtBop,e2) => {
+        (eval(env, e1), eval(env, e2)) match {
+          case (NumVal(b1),NumVal(b2)) => BoolVal(b1 < b2)
+          case (BoolVal(b1),BoolVal(b2)) => BoolVal(b1 < b2)
+          case _ => UndefVal
+        }
+      }
+      // <=
+      case BopExpr(e1,LteBop,e2) => {
+        (eval(env, e1), eval(env, e2)) match {
+          case (NumVal(b1),NumVal(b2)) => BoolVal(b1 <= b2)
+          case (BoolVal(b1),BoolVal(b2)) => BoolVal(b1 <= b2)
+          case _ => UndefVal
+        }
+      }
+      // >
+      case BopExpr(e1,GtBop,e2) => {
+        (eval(env, e1), eval(env, e2)) match {
+          case (NumVal(b1),NumVal(b2)) => BoolVal(b1 > b2)
+          case (BoolVal(b1),BoolVal(b2)) => BoolVal(b1 > b2)
+          case _ => UndefVal
+        }
+      }
+      // >=
+      case BopExpr(e1,GteBop,e2) => {
+        (eval(env, e1), eval(env, e2)) match {
+          case (NumVal(b1),NumVal(b2)) => BoolVal(b1 >= b2)
+          case (BoolVal(b1),BoolVal(b2)) => BoolVal(b1 >= b2)
+          case _ => UndefVal
+        }
+      }
+
+      // Unary Operators
+      // !
+      case UopExpr(NotUop,e1) => {
+        eval(env, e1) match {
+          case BoolVal(b1) => BoolVal(!b1)
+          case _ => UndefVal
+        }
+      }
+      // -
+      case UopExpr(NegUop,e1) => {
+        eval(env, e1) match {
+          case NumVal(b1) => NumVal(-b1)
+          case _ => UndefVal
+        }
+      }
 
       // Vars, If, Let
 
