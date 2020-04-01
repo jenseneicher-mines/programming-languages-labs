@@ -43,6 +43,7 @@ object SimpleParser extends JavaTokenParsers {
     case("true") => ve(true)
     case("false") => ve(false)
     case(floatingPointNumber) => ve(NumVal(floatingPointNumber.toFloat))
+    case(decimalNumber) => ve(NumVal(decimalNumber.toFloat))
   }
 
   def parse(s:String) : Expr = {
