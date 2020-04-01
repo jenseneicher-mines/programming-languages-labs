@@ -99,6 +99,19 @@ object Evaluator3 {
       }
 
       // Vars, If, Let
+      case IfExpr(c, e1, e2) => {
+        eval(env, c) match {
+          case BoolVal(true) => eval(env, e1)
+          
+          case BoolVal(false) => eval(env, e2) 
+          
+          case _ => UndefVal
+        }
+      }
+
+      case VarExpr(v) => {
+        env.readEnvironment()
+      }
 
       // See: Ast.readEnvironment, Ast.pushEnvironment
 

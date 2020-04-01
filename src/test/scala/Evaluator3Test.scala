@@ -11,4 +11,8 @@ class Evaluator3Test extends FlatSpec {
   it should "handle simple constant" in {
     assert(Evaluator3.eval((List(Map("x"->0)),Map(0->(Immutable,v(123f)))), BopExpr(VarExpr("x"),PlusBop,BopExpr(ve(4f),PlusBop,ve(5f)))) === v(123f+4f+5f))
   }
+
+  it should "handle if statements" in {
+    assert(Evaluator3.eval((List(),Map()), IfExpr(ve(true), ve(false), ve(true))) === v(false))
+  }
 }
