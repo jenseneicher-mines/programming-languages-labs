@@ -15,4 +15,8 @@ class Evaluator3Test extends FlatSpec {
   it should "handle if statements" in {
     assert(Evaluator3.eval((List(),Map()), IfExpr(ve(true), ve(false), ve(true))) === v(false))
   }
+
+  it should "handle let statements" in {
+    assert(Evaluator3.eval((List(),Map()), LetExpr(Immutable, "x", ve(123), BopExpr(VarExpr("x"),PlusBop,BopExpr(ve(4f),PlusBop,ve(5f))))) === v(123f+4f+5f))
+  }
 }

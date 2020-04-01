@@ -109,8 +109,11 @@ object Evaluator3 {
         }
       }
 
-      case VarExpr(v) => {
-        Ast.readEnvironment(env, v)._2
+      case VarExpr(v) => Ast.readEnvironment(env, v)._2
+
+      case LetExpr(a, v, e1, e2) => {
+        val newenv = Ast.pushEnvironment(env, v, (a, eval(env, e1)))
+        eval(newenv, e2)
       }
 
       // See: Ast.readEnvironment, Ast.pushEnvironment
@@ -119,7 +122,6 @@ object Evaluator3 {
       case ValueExpr(StringVal(_)) => throw UnimplementedError(e)
       case ValueExpr(ClosureVal(_,_)) => throw UnimplementedError(e)
       case ValueExpr(ReferenceVal(_)) => throw UnimplementedError(e)
-      case LetExpr(Mutable, v, e1, e2) => throw UnimplementedError(e)
       case LambdaExpr(name : Option[String], _, e1 : Expr, t2) => throw UnimplementedError(e)
       case CallExpr(e1 : Expr, _) => throw UnimplementedError(e)
       case ObjectExpr(_) => throw UnimplementedError(e)
