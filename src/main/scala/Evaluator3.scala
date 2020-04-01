@@ -110,7 +110,7 @@ object Evaluator3 {
       }
 
       case VarExpr(v) => {
-        env.readEnvironment()
+        Ast.readEnvironment(env, v)._2
       }
 
       // See: Ast.readEnvironment, Ast.pushEnvironment
