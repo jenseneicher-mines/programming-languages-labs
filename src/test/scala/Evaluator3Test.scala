@@ -20,6 +20,10 @@ class Evaluator3Test extends FlatSpec {
     assert(Evaluator3.eval((List(),Map()), LetExpr(Immutable, "x", ve(123), BopExpr(VarExpr("x"),PlusBop,BopExpr(ve(4f),PlusBop,ve(5f))))) === v(123f+4f+5f))
   }
 
+  it should "handle print statements" in {
+    assert(false)
+  }
+
   it should "handle arithmetic expressions" in {
     // perform 3 - (1 + 1) --> 1
     assert(Evaluator3.eval((List(),Map()), BopExpr(ve(3f),MinusBop,BopExpr(ve(1f),PlusBop,ve(1f)))) === v(1f))
@@ -32,4 +36,18 @@ class Evaluator3Test extends FlatSpec {
     // perform 3 + (20 / 5) --> 7
     assert(Evaluator3.eval((List(),Map()), (BopExpr(ve(3f),PlusBop,BopExpr(ve(20f),DivBop,ve(5f))))) === v(7f))
   }
+
+   it should "handle boolean expressions" in {
+    assert(false)
+  }
+
+  it should "handle multiple if statements" in {
+    assert(false)
+  }
+
+  it should "handle complicated let statements" in {
+    assert(false)
+  }
+
+  
 }
