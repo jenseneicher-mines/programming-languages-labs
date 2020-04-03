@@ -19,4 +19,17 @@ class Evaluator3Test extends FlatSpec {
   it should "handle let statements" in {
     assert(Evaluator3.eval((List(),Map()), LetExpr(Immutable, "x", ve(123), BopExpr(VarExpr("x"),PlusBop,BopExpr(ve(4f),PlusBop,ve(5f))))) === v(123f+4f+5f))
   }
+
+  it should "handle arithmetic expressions" in {
+    // perform 3 - (1 + 1) --> 1
+    assert(Evaluator3.eval((List(),Map()), BopExpr(ve(3f),MinusBop,BopExpr(ve(1f),PlusBop,ve(1f)))) === v(1f))
+    // perform 3 + (4 - 5) --> 2
+    assert(Evaluator3.eval((List(),Map()), BopExpr(ve(3f),PlusBop,BopExpr(ve(4f),MinusBop,ve(5f)))) === v(2f))
+    // perform 3 - (4 - 5) --> 4
+    assert(Evaluator3.eval((List(),Map()), BopExpr(ve(3f),MinusBop,BopExpr(ve(4f),MinusBop,ve(5f)))) === v(4f))
+    // perform 3 - (4 * 5) --> -17
+    assert(Evaluator3.eval((List(),Map()), BopExpr(ve(3f),MinusBop,BopExpr(ve(4f),TimesBop,ve(5f)))) === v(-17f))
+    // perform 3 + (20 / 5) --> 7
+    assert(Evaluator3.eval((List(),Map()), (BopExpr(ve(3f),PlusBop,BopExpr(ve(20f),DivBop,ve(5f))))) === v(7f))
+  }
 }
