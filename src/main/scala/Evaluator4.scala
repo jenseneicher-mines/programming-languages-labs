@@ -16,7 +16,6 @@ object Evaluator4 {
       case BopExpr(e1,TimesBop,e2) => NumVal(toNum(eval(env, e1)) * toNum(eval(env, e2)))
       case BopExpr(e1,DivBop,e2) => NumVal(toNum(eval(env, e1)) / toNum(eval(env, e2)))
 
-
       case BopExpr(e1,EqBop,e2) => BoolVal(eval(env, e1) == eval(env, e2))
       case BopExpr(e1,NeqBop,e2) => BoolVal(eval(env, e1) != eval(env, e2))
       case UopExpr(NegUop,e) => NumVal(-toNum(eval(env, e)))
@@ -25,6 +24,7 @@ object Evaluator4 {
         val (_,v) = readEnvironment(env, x)
         v
       }
+
       case IfExpr(c, e1, e2) => if(toBool(eval(env, c))) eval(env, e1) else eval(env, e2)
       case LetExpr(Immutable, v, e1, e2) => eval(pushEnvironment(env, v, (Immutable,eval(env, e1))), e2)
       case PrintExpr(e) => {
@@ -34,10 +34,55 @@ object Evaluator4 {
 
       // TODO:
       // - PlusBop
+      case BopExpr(e1,PlusBop,e2) => {
+        (eval(env, e1), eval(env, e2)) match {
+          case (NumVal(e1n), NumVal(e2n)) => NumVal(e1n + e2n)
+          case (StringVal(e1s), e2_) => StringVal(e1s + toStr(e2_))
+          case (e1_, StringVal(e2s)) => StringVal(toStr(e1_) + e2s)
+          case (_,_) => throw UnimplementedError(e)
+        }
+      }
       // - LteBop
+      case BopExpr(e1,LteBop,e2) => {
+        (eval(env, e1), eval(env, e2)) match {
+          case (NumVal(e1n), NumVal(e2n)) => BoolVal(e1n <= e2n)
+          case (NumVal(e1n), e2_) => BoolVal(e1n <= toNum(e2_))
+          case (e1_, NumVal(e2n)) => BoolVal(toNum(e1_) <= e2n)
+          case (StringVal(e1s), StringVal(e2s)) => BoolVal(e1s.compareTo(e2s) <= 0)
+          case (_,_) => throw UnimplementedError(e)
+        }
+      }
       // - LtBop
+      case BopExpr(e1,LtBop,e2) => {
+        (eval(env, e1), eval(env, e2)) match {
+          case (NumVal(e1n), NumVal(e2n)) => BoolVal(e1n < e2n)
+          case (NumVal(e1n), e2_) => BoolVal(e1n < toNum(e2_))
+          case (e1_, NumVal(e2n)) => BoolVal(toNum(e1_) < e2n)
+          case (StringVal(e1s), StringVal(e2s)) => BoolVal(e1s.compareTo(e2s) < 0)
+          case (_,_) => throw UnimplementedError(e)
+        }
+      }
       // - GteBop
+      case BopExpr(e1,GteBop,e2) => {
+        (eval(env, e1), eval(env, e2)) match {
+          case (NumVal(e1n), NumVal(e2n)) => BoolVal(e1n >= e2n)
+          case (NumVal(e1n), e2_) => BoolVal(e1n >= toNum(e2_))
+          case (e1_, NumVal(e2n)) => BoolVal(toNum(e1_) >= e2n)
+          case (StringVal(e1s), StringVal(e2s)) => BoolVal(e1s.compareTo(e2s) >= 0)
+          case (_,_) => throw UnimplementedError(e)
+        }
+      }
       // - GtBop
+      case BopExpr(e1,GtBop,e2) => {
+        (eval(env, e1), eval(env, e2)) match {
+          case (NumVal(e1n), NumVal(e2n)) => BoolVal(e1n > e2n)
+          case (NumVal(e1n), e2_) => BoolVal(e1n > toNum(e2_))
+          case (e1_, NumVal(e2n)) => BoolVal(toNum(e1_) > e2n)
+          case (StringVal(e1s), StringVal(e2s)) => BoolVal(e1s.compareTo(e2s) > 0)
+          case (_,_) => throw UnimplementedError(e)
+        }
+      }
+
       // - LambdaExpr
       // - CallExpr
 
@@ -52,6 +97,7 @@ object Evaluator4 {
         // TODO
         throw UnimplementedError(e)
       }
+
       case ValueExpr(ClosureVal(_,_)) => throw UnimplementedError(e)
       case ValueExpr(ReferenceVal(_)) => throw UnimplementedError(e)
       case LetExpr(Mutable, v, e1, e2) => throw UnimplementedError(e)
