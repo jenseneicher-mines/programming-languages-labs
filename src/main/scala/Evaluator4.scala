@@ -97,10 +97,12 @@ object Evaluator4 {
       }
       case CallExpr(e1 : Expr, (e2 : Expr)::Nil) => {
         // TODO
-        eval(env, e1) match{
+        val v = eval(env, e1) 
+        v match{
           case ClosureVal(_, LambdaExpr(name, List((x, t)), ex, rt)) => {
-            println(x)
-            val new_env = pushEnvironment(env, x, (Immutable, eval(env, e2)))
+            val temp_env = pushEnvironment(env, name.get, (Immutable, v))
+            val new_env = pushEnvironment(temp_env, x, (Immutable, eval(env, e2)))
+            //println(eval(new_env, ex))
             eval(new_env, ex)
           }
           case _ => throw UnimplementedError(e)
