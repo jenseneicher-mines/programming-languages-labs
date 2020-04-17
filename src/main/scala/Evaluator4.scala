@@ -105,7 +105,6 @@ object Evaluator4 {
             //println(eval(new_env, ex))
             eval(new_env, ex)
           }
-          case _ => throw UnimplementedError(e)
         }
       }
 
