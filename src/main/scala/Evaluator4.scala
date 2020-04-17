@@ -91,11 +91,20 @@ object Evaluator4 {
 
       case LambdaExpr(name : Option[String], (x : String, t)::Nil, e1 : Expr, rt) => {
         // TODO
-        throw UnimplementedError(e)
+        // Ast.ClosureVal requires (m : NameMap = Map[String,Int], l : LambdaExpr)
+        
+        ClosureVal(Map(), LambdaExpr(name, List((x, t)), e1, rt))
       }
       case CallExpr(e1 : Expr, (e2 : Expr)::Nil) => {
         // TODO
-        throw UnimplementedError(e)
+        eval(env, e1) match{
+          case ClosureVal(_, LambdaExpr(name, List((x, t)), ex, rt)) => {
+            println(x)
+            val new_env = pushEnvironment(env, x, (Immutable, eval(env, e2)))
+            eval(new_env, ex)
+          }
+          case _ => throw UnimplementedError(e)
+        }
       }
 
       case ValueExpr(ClosureVal(_,_)) => throw UnimplementedError(e)
