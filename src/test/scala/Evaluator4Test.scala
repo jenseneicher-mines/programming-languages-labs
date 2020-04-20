@@ -12,6 +12,10 @@ class Evaluator4Test extends FlatSpec {
     assert(Evaluator4.eval((List(Map("x"->0)),Map(0->(Immutable,NumVal(123f)))), BopExpr(VarExpr("x"),PlusBop,BopExpr(ve(4f),PlusBop,ve(5f)))) === v(123f+4f+5f))
   }
 
+  it should "handle a simple function" in {
+    assert(Evaluator4.eval((List(),Map()), CallExpr(LambdaExpr(Some("inc"), List(("x", None)), BopExpr(VarExpr("x"), PlusBop, ve(1f)), None), List(ve(5f)))) === v(6f))
+  }
+
   it should "handle simple recursive function" in {
     val n = 6;
     val e1 = CallExpr(LambdaExpr(Some("dec"),List(("x",None)),IfExpr(BopExpr(VarExpr("x"),GtBop,ve(0f)),BopExpr(VarExpr("x"),PlusBop,CallExpr(VarExpr("dec"),List(BopExpr(VarExpr("x"),MinusBop,ve(1f))))),ve(0f)),None),List(ve(n.toFloat)))
