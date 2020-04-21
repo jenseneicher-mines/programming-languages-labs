@@ -12,8 +12,24 @@ class Evaluator4Test extends FlatSpec {
     assert(Evaluator4.eval((List(Map("x"->0)),Map(0->(Immutable,NumVal(123f)))), BopExpr(VarExpr("x"),PlusBop,BopExpr(ve(4f),PlusBop,ve(5f)))) === v(123f+4f+5f))
   }
 
-  it should "handle a simple function" in {
+  it should "handle a simple function increment" in {
     assert(Evaluator4.eval((List(),Map()), CallExpr(LambdaExpr(Some("inc"), List(("x", None)), BopExpr(VarExpr("x"), PlusBop, ve(1f)), None), List(ve(5f)))) === v(6f))
+  }
+
+  //it should "handle a simple boolean function" in {
+  //  assert(Evaluator4.eval((List(),Map()), CallExpr(LambdaExpr(Some("istrue"), List(("x", None)), IfExpr(BopExpr(VarExpr("x"),EqBop,ve("true"))), None), List(ve("true")))) === v("true"))
+ // }
+
+  it should "handle a simple function that returns a decimil" in {
+    assert(Evaluator4.eval((List(),Map()), CallExpr(LambdaExpr(Some("div"), List(("x", None)), BopExpr(VarExpr("x"), DivBop, ve(2f)), None), List(ve(1f)))) === v(0.5f))
+  }
+
+  it should "handle a simple function multiply" in {
+    assert(Evaluator4.eval((List(),Map()), CallExpr(LambdaExpr(Some("mult"), List(("x", None)), BopExpr(VarExpr("x"), TimesBop, ve(3f)), None), List(ve(5f)))) === v(15f))
+  }
+
+  it should "handle a simple string concatination function" in {
+    assert(Evaluator4.eval((List(),Map()), CallExpr(LambdaExpr(Some("conc"), List(("x", None)), BopExpr(VarExpr("x"), PlusBop, ve("languages")), None), List(ve("programming")))) === v("programminglanguages"))
   }
 
   it should "handle simple recursive function" in {
