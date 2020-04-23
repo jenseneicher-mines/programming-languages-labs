@@ -9,7 +9,6 @@ object Evaluator5 {
       case ValueExpr(BoolVal(_)) => BoolType
       case ValueExpr(NumVal(_)) => NumType
       case ValueExpr(StringVal(_)) => StringType
-      case BopExpr(e1,AndBop,e2) => BoolType
       case PrintExpr(e) => UnitType
       case IfExpr(c, e1, e2) => {
         (typecheck(env, e1),typecheck(env, e2)) match {
@@ -19,23 +18,87 @@ object Evaluator5 {
       }
 
       /* TODO */
-      case BopExpr(e1,OrBop,e2) => throw UnimplementedError(e)
-      case BopExpr(e1,PlusBop,e2) => throw UnimplementedError(e)
-      case BopExpr(e1,MinusBop,e2) => throw UnimplementedError(e)
-      case BopExpr(e1,TimesBop,e2) => throw UnimplementedError(e)
-      case BopExpr(e1,DivBop,e2) => throw UnimplementedError(e)
-      case BopExpr(e1,LteBop,e2) => throw UnimplementedError(e)
-      case BopExpr(e1,LtBop,e2) => throw UnimplementedError(e)
-      case BopExpr(e1,GteBop,e2) => throw UnimplementedError(e)
-      case BopExpr(e1,GtBop,e2) => throw UnimplementedError(e)
-      case BopExpr(e1,EqBop,e2) => throw UnimplementedError(e)
-      case BopExpr(e1,NeqBop,e2) => throw UnimplementedError(e)
-      case UopExpr(NegUop,e) => throw UnimplementedError(e)
-      case UopExpr(NotUop,e) => throw UnimplementedError(e)
-      case VarExpr(v) => throw UnimplementedError(e)
-      case LetExpr(Immutable, v, e1, e2) => throw UnimplementedError(e)
-      case LambdaExpr(name : Option[String], (x : String, Some(xt : Type))::Nil, ex : Expr, ext : Option[Type]) => throw UnimplementedError(e)
-      case CallExpr(e1 : Expr, (e2 : Expr)::Nil) => throw UnimplementedError(e)
+      case BopExpr(e1,AndBop,e2) => {
+        (typecheck(env, e1),typecheck(env, e2)) match {
+          case (t1,t2) if t1==t2 => t1
+          case _ => throw StaticTypeError(e)
+        }
+      }
+      case BopExpr(e1,OrBop,e2) => {
+        (typecheck(env, e1),typecheck(env, e2)) match {
+          case (t1,t2) if t1==t2 => t1
+          case _ => throw StaticTypeError(e)
+        }
+      }
+      // _ <= _ -> Bool
+      case BopExpr(e1,LteBop,e2) => BoolType
+      // _ < _ -> Bool
+      case BopExpr(e1,LtBop,e2) => BoolType
+      // _ >= _ -> Bool
+      case BopExpr(e1,GteBop,e2) => BoolType
+      // _ > _ -> Bool
+      case BopExpr(e1,GtBop,e2) => BoolType
+      // _ == _ -> Bool
+      case BopExpr(e1,EqBop,e2) => BoolType
+      // _ != _ -> Bool
+      case BopExpr(e1,NeqBop,e2) => BoolType
+      // String + String -> String
+      // String + Num -> String
+      // String + Bool -> String
+      // String + Unit -> String
+      // String + Function -> String
+      // Num + Num -> Num
+      // Num + Bool -> Num
+      // Num + Unit -> Num
+      // Num + Function -> String
+      // Bool + Bool -> Num
+      // Bool + Unit -> Num
+      // Bool + Function -> String
+      // Unit + Unit -> Num
+      // Unit + Function -> String
+      // Function + Function -> Function
+      case BopExpr(e1,PlusBop,e2) => {
+        (typecheck(env, e1),typecheck(env, e2)) match {
+          case (t1,t2) if (t1==StringType && canConvert(t2, StringType)) || (t2==StringType && canConvert(t1, StringType)) => StringType
+          case (t1,t2) if t1==FunctionType  || t2==FunctionType => StringType
+          case (t1,t2) if canConvert(t1, NumType) && canConvert(t2, NumType) => NumType
+        }
+      }
+      // _ - _ -> Num
+      case BopExpr(e1,MinusBop,e2) => NumType
+      // _ * _ -> Num
+      case BopExpr(e1,TimesBop,e2) => NumType
+      // _ / _ -> Num
+      case BopExpr(e1,DivBop,e2) => NumType
+      // -_ -> Num
+      case UopExpr(NegUop,e) => NumType
+      // !_ -> Bool
+      case UopExpr(NotUop,e) => BoolType
+      // x -> env[x] || UnitType
+      case VarExpr(v) => {
+        // Check if in env, return value
+        if (env.contains(v)) env(v) else UnitType
+      }
+      // let -> typeof(e2)
+      case LetExpr(Immutable, v, e1, e2) => {
+        // Push variable with typeof(e1) to env
+        // Return typeof(e2)
+        typecheck(env + (v -> typecheck(env, e1)), e2)
+      }
+      // lambda -> FunctionType
+      case LambdaExpr(name : Option[String], (x : String, Some(xt : Type))::Nil, ex : Expr, ext : Option[Type]) => {
+        ext match {
+          case None => FunctionType(xt, typecheck(env + (x -> xt), ex))
+          case Some(rt) if canConvert(typecheck(env + (x -> xt), ex), rt) => FunctionType(xt, rt)
+          case _ => throw StaticTypeError(e)
+        }
+      }
+      case CallExpr(e1 : Expr, (e2 : Expr)::Nil) => {
+        (typecheck(env, e1),typecheck(env, e2)) match {
+          case (FunctionType(pt, rt), at) if canConvert(at, pt) => rt
+          case _ =>  throw StaticTypeError(e)
+        }
+      }
       /* END OF TODO */
 
       /* Other Lambda */
