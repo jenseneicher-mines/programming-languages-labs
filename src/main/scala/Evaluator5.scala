@@ -173,12 +173,23 @@ object Evaluator5 {
         UndefVal
       }
       case LambdaExpr(name : Option[String], (x : String, t1)::Nil, e1 : Expr, t2) => {
-        // TODO
-        throw UnimplementedError(e)
+        // Evaluating in a static environment rather than a dynamic one.
+        //
+        println(env._1.size)
+        val tmp_name_map = if (env._1.size == 0) Map() else env._1(0)
+        ClosureVal(if (env._1.size == 0) Map() else env._1(0), LambdaExpr(name, List((x, t1)), e1, t2))
       }
       case CallExpr(e1 : Expr, (e2 : Expr)::Nil) => {
         // TODO
-        throw UnimplementedError(e)
+        val v = eval(env, e1) 
+        v match{
+          case ClosureVal(static_env, LambdaExpr(name, List((x, t)), ex, rt)) => {
+            val temp_env = pushEnvironment((List(static_env), env._2), name.get, (Immutable, v))
+            val new_env = pushEnvironment(temp_env, x, (Immutable, eval(env, e2)))
+            //println(eval(new_env, ex))
+            eval(new_env, ex)
+          }
+        }
       }
 
 

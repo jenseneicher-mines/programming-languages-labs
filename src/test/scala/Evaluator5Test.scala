@@ -23,7 +23,7 @@ class Evaluator5Test extends FlatSpec {
      const f = (y) => x + y
      const x = 7;
      f(6)*/
-    val e1 = LetExpr(Immutable, "x", ve(5f), LetExpr(Immutable, "f", LambdaExpr(None, List(("y",Some(NumType))), BopExpr(VarExpr("x"),PlusBop,VarExpr("y")), None), LetExpr(Immutable, "x", ve(7f), CallExpr(VarExpr("f"), List(ve(6f))))))
+    val e1 = LetExpr(Immutable, "x", ve(5f), LetExpr(Immutable, "f", LambdaExpr(Some("f"), List(("y",Some(NumType))), BopExpr(VarExpr("x"),PlusBop,VarExpr("y")), None), LetExpr(Immutable, "x", ve(7f), CallExpr(VarExpr("f"), List(ve(6f))))))
     //assert(Evaluator5.eval(Map(), e1) === NumVal(13f)) // dynamic typing
     assert(Evaluator5.eval((List(),Map()), e1) === NumVal(11f)) // static typing
   }
