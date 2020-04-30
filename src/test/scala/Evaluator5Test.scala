@@ -108,11 +108,11 @@ class Evaluator5Test extends FlatSpec {
   }
 
   it should "typecheck simple conditional statements" in {
-    assert(false)
+    assert(Evaluator5.typecheck(Map(), IfExpr(ve(false),ve(true),ve(true))) === BoolType)
   }
 
   it should "typecheck let statements" in {
-    assert(false)
+    assert(Evaluator5.typecheck(Map(), LetExpr(Immutable, "x", ve(123), BopExpr(VarExpr("x"),PlusBop,ve(5f)))) === NumType)
   }
 
   it should "typecheck simple recursive functions part 2" in {
