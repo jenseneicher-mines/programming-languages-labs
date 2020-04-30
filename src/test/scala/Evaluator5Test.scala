@@ -34,6 +34,29 @@ class Evaluator5Test extends FlatSpec {
     assert(Evaluator5.eval((List(),Map()), e1) === NumVal((1 to n).foldLeft(1f)(_.toFloat*_.toFloat)))
   }
 
+  it should "handke a string appending function" in {
+     assert(Evaluator5.eval((List(),Map()), CallExpr(LambdaExpr(Some("conc"), List(("x", None)), BopExpr(VarExpr("x"), PlusBop, ve("languages")), None), List(ve("programming")))) === v("programminglanguages"))
+  }
+
+  it should "handle a division function" in {
+    assert(Evaluator5.eval((List(),Map()), CallExpr(LambdaExpr(Some("mult"), List(("x", None)), BopExpr(VarExpr("x"), DivBop, ve(5f)), None), List(ve(15f)))) === v(3f))
+  }
+
+  it should "handle a boolean function" in {
+    assert(Evaluator5.eval((List(),Map()), IfExpr(ve(false),ve(true),ve(true))) === BoolVal(true))
+  }
+
+  it should "handle a squaring function" in {
+    assert(Evaluator5.eval((List(),Map()), CallExpr(LambdaExpr(Some("square"), List(("x", None)), BopExpr(VarExpr("x"), TimesBop, VarExpr("x")), None), List(ve(15f)))) === v(225f))
+  }
+
+  it should "handle recursive counting function" in {
+    val n = 6;
+    val e1 = CallExpr(LambdaExpr(Some("count"),List(("x",Some(NumType))),IfExpr(BopExpr(VarExpr("x"),GtBop,ValueExpr(NumVal(0f))),BopExpr(VarExpr("x"),PlusBop,CallExpr(VarExpr("count"),List(BopExpr(VarExpr("x"),MinusBop,ValueExpr(NumVal(1f)))))),ValueExpr(NumVal(1f))),Some(NumType)),List(ValueExpr(NumVal(n.toFloat))))
+    assert(Evaluator5.eval((List(),Map()), e1) === NumVal(22f))
+  }
+
+
   "Typecheck" should "typecheck simple recursive function" in {
     val n = 6;
     val e1 = CallExpr(LambdaExpr(Some("fact"),List(("x",Some(NumType))),IfExpr(BopExpr(VarExpr("x"),GtBop,ValueExpr(NumVal(0f))),BopExpr(VarExpr("x"),TimesBop,CallExpr(VarExpr("fact"),List(BopExpr(VarExpr("x"),MinusBop,ValueExpr(NumVal(1f)))))),ValueExpr(NumVal(1f))),Some(NumType)),List(ValueExpr(NumVal(n.toFloat))))
